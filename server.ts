@@ -41,7 +41,7 @@ async function startServer() {
 
     const mailOptions = {
       from: `"Jupiter Infotech System" <${smtpUser}>`,
-      to: "shaiksamad242@gmail.com",
+      to: "manager@jupiterinfotech.co.in",
       subject: `New Application: ${role} from ${name}`,
       text: `
         New Application Details:

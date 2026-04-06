@@ -442,7 +442,7 @@ export default function App() {
               <div className="job rv"><div><div className="jt">Operations Manager</div><div className="jtags"><span className="jtag">Full-time</span><span className="jtag">Bangalore</span><span className="jtag">Senior</span></div></div></div>
             </div>
             <div style={{ marginTop: '3rem', textAlign: 'center' }} className="rv">
-              <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>To apply, please use the <a onClick={() => go('contact')} style={{ color: 'var(--pink)', fontWeight: 600, cursor: 'pointer' }}>Contact Form</a> or send your resume to <a href="mailto:shaiksamad242@gmail.com" style={{ color: 'var(--pink)', fontWeight: 600 }}>shaiksamad242@gmail.com</a></p>
+              <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>To apply, please use the <a onClick={() => go('contact')} style={{ color: 'var(--pink)', fontWeight: 600, cursor: 'pointer' }}>Contact Form</a> or send your resume to <a href="mailto:manager@jupiterinfotech.co.in" style={{ color: 'var(--pink)', fontWeight: 600 }}>manager@jupiterinfotech.co.in</a></p>
             </div>
           </div>
         </section>
@@ -525,7 +525,8 @@ export default function App() {
                 <h3>Email</h3>
                 <p>Send us an email anytime:</p>
                 <div className="clinks">
-                  <a href="mailto:shaiksamad242@gmail.com">shaiksamad242@gmail.com</a>
+                  <a href="mailto:gm@jupiterinfotech.co.in">gm@jupiterinfotech.co.in</a>
+                  <a href="mailto:manager@jupiterinfotech.co.in">manager@jupiterinfotech.co.in</a>
                 </div>
               </div>
               <div className="ccard rv">
@@ -574,7 +575,7 @@ function Footer({ go }: { go: (id: string) => void }) {
         <div className="fcontact">
           📞 <a href="tel:+919972135467">+91 99721 35467</a> · <a href="tel:+919606975325">+91 96069 75325</a> · <a href="tel:+918050266702">+91 80502 66702</a>
           <br />
-          ✉️ <a href="mailto:shaiksamad242@gmail.com">shaiksamad242@gmail.com</a>
+          ✉️ <a href="mailto:gm@jupiterinfotech.co.in">gm@jupiterinfotech.co.in</a> · <a href="mailto:manager@jupiterinfotech.co.in">manager@jupiterinfotech.co.in</a>
         </div>
         <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka</div>
       </div>
