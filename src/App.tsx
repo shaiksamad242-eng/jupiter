@@ -139,7 +139,7 @@ export default function App() {
               </linearGradient>
             </defs>
           </svg>
-          <span className="nav-logo-text">Jupiter BPO</span>
+          <span className="nav-logo-text">Jupiter Infotech</span>
         </div>
         <ul className="nav-links">
           <li><a onClick={() => go('home')} className={activePage === 'home' ? 'active' : ''} data-p="home">Home</a></li>
@@ -163,10 +163,10 @@ export default function App() {
         <section className="hero">
           <div className="blob b1"></div><div className="blob b2"></div><div className="blob b3"></div><div className="blob b4"></div>
           <div className="hero-inner">
-            <div className="hbadge"><span className="bdot"></span>Business Process Outsourcing</div>
+            <div className="hbadge"><span className="bdot"></span>Infotech & Business Solutions</div>
             <div className="hloc">📍 Bangalore · Gulbarga · Karnataka</div>
-            <h1><span className="gt">Jupiter</span><br />BPO Services</h1>
-            <p className="hero-sub">Quality, Efficiency, Innovation — delivering high-quality BPO services that power your business growth and build lasting partnerships worldwide.</p>
+            <h1><span className="gt">Jupiter</span><br />Infotech Services</h1>
+            <p className="hero-sub">Quality, Efficiency, Innovation — delivering high-quality IT and business services that power your business growth and build lasting partnerships worldwide.</p>
             <div className="hbtns">
               <button className="btn-f" onClick={() => go('services')}>Our Services</button>
             </div>
@@ -214,9 +214,9 @@ export default function App() {
         <section className="home-why">
           <div className="hw-inner">
             <div className="hw-text rvl">
-              <div className="slabel">Why Jupiter BPO</div>
+              <div className="slabel">Why Jupiter Infotech</div>
               <h2>Quality, Efficiency,<br /><span className="gt">Innovation</span></h2>
-              <p>At Jupiter BPO Services, we prioritize quality standards that ensure client satisfaction and optimal performance. Our commitment to excellence drives every aspect of our operations, fostering trust and reliability.</p>
+              <p>At Jupiter Infotech Services, we prioritize quality standards that ensure client satisfaction and optimal performance. Our commitment to excellence drives every aspect of our operations, fostering trust and reliability.</p>
               <p>We implement efficient processes that streamline workflows, reduce turnaround times, and enhance productivity — delivering cost-effective solutions that meet the evolving needs of our clients.</p>
               <button className="btn-f" onClick={() => go('about')} style={{ marginTop: '.6rem' }}>Learn More</button>
             </div>
@@ -234,7 +234,7 @@ export default function App() {
       {/* ===== ABOUT ===== */}
       <div className={`page ${activePage === 'about' ? 'active' : ''}`} id="pg-about">
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
-        <div className="about-hero"><h1>About Jupiter BPO</h1><p>Quality, Efficiency, Innovation — the three pillars that define everything we do at Jupiter BPO Services, based in Bangalore and Gulbarga, Karnataka.</p></div>
+        <div className="about-hero"><h1>About Jupiter Infotech</h1><p>Quality, Efficiency, Innovation — the three pillars that define everything we do at Jupiter Infotech Services, based in Bangalore and Gulbarga, Karnataka.</p></div>
         <section className="vals-sec">
           <div className="vi">
             <div className="rv" style={{ textAlign: 'center' }}><div className="slabel">Core Values</div><h2>What We <span className="gt">Stand For</span></h2></div>
@@ -250,14 +250,14 @@ export default function App() {
         <section className="mvv-sec">
           <div className="mvv-i">
             <div className="mvv-card rv"><div className="mvv-icon">🎯</div><h3>Our Mission</h3><ul>
-              <li>Deliver high-quality BPO services to clients worldwide</li>
+              <li>Deliver high-quality Infotech services to clients worldwide</li>
               <li>Build long-term partnerships based on trust and performance</li>
               <li>Provide cost-effective and scalable solutions</li>
               <li>Continuously improve through technology and skilled talent</li>
             </ul></div>
             <div className="mvv-card rv"><div className="mvv-icon">🔭</div><h3>Our Vision</h3><ul>
-              <li>Become a trusted global outsourcing partner</li>
-              <li>Deliver reliable and high-quality BPO services</li>
+              <li>Become a trusted global technology partner</li>
+              <li>Deliver reliable and high-quality Infotech services</li>
               <li>Build long-term partnerships with clients worldwide</li>
               <li>Drive business growth through innovation and efficiency</li>
               <li>Create a skilled and empowered workforce</li>
@@ -285,9 +285,9 @@ export default function App() {
               <div className="pc rv"><div className="pimg pi0">🎧</div><div className="pb"><div className="ptag">Customer Support & Sales</div><h3>Telecom Company — CX Overhaul</h3><p>Redesigned customer support, reducing response times and improving first-call resolution across all channels, resulting in measurable CSAT improvements.</p><span className="pres">↑ CSAT Score · ↓ Handle Time</span></div></div>
               <div className="pc rv"><div className="pimg pi1">💼</div><div className="pb"><div className="ptag">Back Office</div><h3>E-commerce Brand — Back Office Scale</h3><p>Streamlined order management and data processing, enabling the client to handle 3x volume during peak seasons without added overhead costs.</p><span className="pres">3x Volume · Zero Extra Cost</span></div></div>
               <div className="pc rv"><div className="pimg pi2">💻</div><div className="pb"><div className="ptag">IT Helpdesk</div><h3>Software Firm — 24/7 IT Support</h3><p>Stood up a dedicated IT helpdesk team achieving sub-2-minute response times and 99%+ uptime SLA compliance for all critical systems.</p><span className="pres">99% Uptime · &lt;2 Min Response</span></div></div>
-              <div className="pc rv"><div className="pimg pi3">🏥</div><div className="pb"><div className="ptag">Healthcare & Medical Support</div><h3>Healthcare Provider — Medical BPO</h3><p>Managed patient support, scheduling, and billing — enabling the clinical team to focus entirely on patient care while we handled operations.</p><span className="pres">↑ Patient Satisfaction</span></div></div>
+              <div className="pc rv"><div className="pimg pi3">🏥</div><div className="pb"><div className="ptag">Healthcare & Medical Support</div><h3>Healthcare Provider — Medical Infotech</h3><p>Managed patient support, scheduling, and billing — enabling the clinical team to focus entirely on patient care while we handled operations.</p><span className="pres">↑ Patient Satisfaction</span></div></div>
               <div className="pc rv"><div className="pimg pi4">🏦</div><div className="pb"><div className="ptag">Banking & Financial Services</div><h3>NBFC — Finance Process Outsourcing</h3><p>Took over loan processing and customer query management, reducing turnaround time by over 40% with zero compliance issues reported.</p><span className="pres">40% Faster TAT · 0 Compliance Issues</span></div></div>
-              <div className="pc rv"><div className="pimg pi5">🚀</div><div className="pb"><div className="ptag">Startups & SMEs</div><h3>D2C Startup — Full BPO Partnership</h3><p>Provided end-to-end customer support and back-office from launch — enabling founders to scale without building an ops team in-house.</p><span className="pres">Live in 2 Weeks · 5-Star Reviews</span></div></div>
+              <div className="pc rv"><div className="pimg pi5">🚀</div><div className="pb"><div className="ptag">Startups & SMEs</div><h3>D2C Startup — Full Infotech Partnership</h3><p>Provided end-to-end customer support and back-office from launch — enabling founders to scale without building an ops team in-house.</p><span className="pres">Live in 2 Weeks · 5-Star Reviews</span></div></div>
             </div>
           </div>
         </section>
@@ -324,7 +324,7 @@ export default function App() {
       {/* ===== PORTFOLIO ===== */}
       <div className={`page ${activePage === 'portfolio' ? 'active' : ''}`} id="pg-portfolio">
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
-        <div className="svc-hero"><h1>Our Comprehensive<br />BPO Service Offerings</h1><p>Providing exceptional service across multiple communication channels — Customer Support, Back Office, and IT Helpdesk.</p></div>
+        <div className="svc-hero"><h1>Our Comprehensive<br />Infotech Service Offerings</h1><p>Providing exceptional service across multiple communication channels — Customer Support, Back Office, and IT Helpdesk.</p></div>
         <section className="svc-main">
           <div className="si">
             <div className="sgrid">
@@ -340,7 +340,7 @@ export default function App() {
         </section>
         <section className="ind-sec">
           <div className="ind-i">
-            <div className="ind-h rv"><div className="slabel">Industries We Serve</div><h2>Serving <span className="gt">15+ Industries</span></h2><p>Our BPO expertise spans a wide range of sectors, bringing domain knowledge to every engagement.</p></div>
+            <div className="ind-h rv"><div className="slabel">Industries We Serve</div><h2>Serving <span className="gt">15+ Industries</span></h2><p>Our Infotech expertise spans a wide range of sectors, bringing domain knowledge to every engagement.</p></div>
             <div className="igrid rv">
               <div className="iitem"><div className="iico">🛒</div>E-commerce & Retail</div>
               <div className="iitem"><div className="iico">📡</div>Telecommunications</div>
@@ -362,7 +362,7 @@ export default function App() {
         </section>
         <section className="adv-sec">
           <div className="adv-i">
-            <div className="adv-h rv"><div className="slabel">Competitive Advantages</div><h2>Key Differentiators of <span className="gt">Jupiter BPO</span></h2></div>
+            <div className="adv-h rv"><div className="slabel">Competitive Advantages</div><h2>Key Differentiators of <span className="gt">Jupiter Infotech</span></h2></div>
             <div className="adv-grid rv">
               <div className="adv-card"><h3>🔄 Flexible Solutions</h3><p>Our services offer adaptable and scalable options that grow with your business, allowing clients to choose the level of support that fits their unique requirements — without rigid contracts.</p></div>
               <div className="adv-card"><h3>⚙️ Advanced Technology</h3><p>We integrate cutting-edge technology into our operations, ensuring clients benefit from efficient processes and tools that enhance productivity while avoiding the limitations of outdated legacy systems.</p></div>
@@ -386,14 +386,14 @@ export default function App() {
             <div className="test-h rv"><div className="slabel">Client Voices</div><h2>What Our Clients<br /><span className="gt">Say About Us</span></h2><p>Our commitment to quality and client satisfaction speaks through the words of those we partner with every day.</p></div>
             <div className="tfeat rv">
               <div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div>
-              <p className="ttxt">"Jupiter BPO Services transformed our customer support operations completely. Their team understood our business from day one, and the quality of service they deliver has directly contributed to a significant improvement in our customer satisfaction scores. We consider them a true long-term partner."</p>
+              <p className="ttxt">"Jupiter Infotech Services transformed our customer support operations completely. Their team understood our business from day one, and the quality of service they deliver has directly contributed to a significant improvement in our customer satisfaction scores. We consider them a true long-term partner."</p>
               <div className="tauth"><div className="tav">👔</div><div><div className="tname">Operations Head</div><div className="tco" style={{ color: 'rgba(255,255,255,.55)' }}>Leading E-commerce Company, Bangalore</div></div></div>
             </div>
             <div className="tgrid">
               <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">The back-office team at Jupiter handles our data processing with incredible accuracy and speed. We've reduced errors by over 60% since partnering with them.</p><div className="tauth"><div className="tav">👩</div><div><div className="tname">Director, Operations</div><div className="tco">NBFC, Karnataka</div></div></div></div>
               <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Their IT helpdesk team is always available and resolves issues faster than any in-house team we've had. SLA adherence is exceptional — truly world-class support.</p><div className="tauth"><div className="tav">👨</div><div><div className="tname">CTO</div><div className="tco">Software Company, Bangalore</div></div></div></div>
-              <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Jupiter BPO helped us launch our customer operations in just 2 weeks. For a startup, that kind of speed and reliability is invaluable. Highly recommend them.</p><div className="tauth"><div className="tav">👩</div><div><div className="tname">Founder & CEO</div><div className="tco">D2C Startup, India</div></div></div></div>
-              <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Unlike other BPO vendors, Jupiter takes time to truly understand our processes before jumping in. That client-focused approach makes all the difference in quality.</p><div className="tauth"><div className="tav">👨</div><div><div className="tname">VP Customer Experience</div><div className="tco">Telecom Company</div></div></div></div>
+              <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Jupiter Infotech helped us launch our customer operations in just 2 weeks. For a startup, that kind of speed and reliability is invaluable. Highly recommend them.</p><div className="tauth"><div className="tav">👩</div><div><div className="tname">Founder & CEO</div><div className="tco">D2C Startup, India</div></div></div></div>
+              <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Unlike other Infotech vendors, Jupiter takes time to truly understand our processes before jumping in. That client-focused approach makes all the difference in quality.</p><div className="tauth"><div className="tav">👨</div><div><div className="tname">VP Customer Experience</div><div className="tco">Telecom Company</div></div></div></div>
               <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Cost savings of over 35% in our first year alone — and the quality actually improved. Jupiter delivers real value through their competitive and transparent pricing.</p><div className="tauth"><div className="tav">👩</div><div><div className="tname">CFO</div><div className="tco">Healthcare Provider, Karnataka</div></div></div></div>
               <div className="tcard rv"><div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div><div className="tq">"</div><p className="ttxt">Jupiter's team feels like an extension of our own. They're proactive, transparent, and genuinely invested in our success. We've expanded our engagement twice.</p><div className="tauth"><div className="tav">👨</div><div><div className="tname">Managing Director</div><div className="tco">Real Estate Firm, Gulbarga</div></div></div></div>
             </div>
@@ -407,14 +407,14 @@ export default function App() {
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
         <section className="blog-sec">
           <div className="blog-i">
-            <div className="blog-h rv"><div className="slabel">Insights & Ideas</div><h2>The Jupiter <span className="gt">Blog</span></h2><p>Thought leadership, industry insights, and practical advice from the BPO experts at Jupiter BPO Services.</p></div>
+            <div className="blog-h rv"><div className="slabel">Insights & Ideas</div><h2>The Jupiter <span className="gt">Blog</span></h2><p>Thought leadership, industry insights, and practical advice from the experts at Jupiter Infotech Services.</p></div>
             <div className="bgrid">
-              <div className="bcard rv"><div className="bthumb bt0">📈</div><div className="bbody"><div className="bmeta"><span className="bcat">Operations</span><span className="bdate">Mar 2026</span></div><h3>How Quality-Driven BPO Processes Boost Client Retention</h3><p>Explore how maintaining rigorous quality standards in BPO operations directly translates to higher client retention and long-term partnerships.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt1">☁️</div><div className="bbody"><div className="bmeta"><span className="bcat">Technology</span><span className="bdate">Mar 2026</span></div><h3>Cloud-Based CRM: The Backbone of Modern BPO Operations</h3><p>How cloud solutions are transforming BPO service delivery — improving collaboration, security, and efficiency across distributed teams.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt2">🌍</div><div className="bbody"><div className="bmeta"><span className="bcat">Industry</span><span className="bdate">Feb 2026</span></div><h3>Why Indian BPO Companies Are the Global Outsourcing Choice</h3><p>India's BPO industry continues to lead globally — driven by skilled talent, cost advantages, and a culture of service excellence.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt3">🔐</div><div className="bbody"><div className="bmeta"><span className="bcat">Compliance</span><span className="bdate">Feb 2026</span></div><h3>Data Security in BPO: What Every Client Should Demand</h3><p>Your outsourcing partner handles sensitive data. Here's what security practices and standards you should insist upon before signing any agreement.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt4">🚀</div><div className="bbody"><div className="bmeta"><span className="bcat">Startups & SMEs</span><span className="bdate">Jan 2026</span></div><h3>How Startups Can Scale Fast with BPO Support</h3><p>For early-stage companies, outsourcing non-core operations to a BPO partner can be the fastest path to scale without burning through runway.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt5">📊</div><div className="bbody"><div className="bmeta"><span className="bcat">Strategy</span><span className="bdate">Jan 2026</span></div><h3>5 Signs Your Business Is Ready to Outsource Operations</h3><p>Not sure if BPO is right for you? These five signals indicate it's time to bring in an expert outsourcing partner like Jupiter BPO Services.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt0">📈</div><div className="bbody"><div className="bmeta"><span className="bcat">Operations</span><span className="bdate">Mar 2026</span></div><h3>How Quality-Driven Processes Boost Client Retention</h3><p>Explore how maintaining rigorous quality standards in operations directly translates to higher client retention and long-term partnerships.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt1">☁️</div><div className="bbody"><div className="bmeta"><span className="bcat">Technology</span><span className="bdate">Mar 2026</span></div><h3>Cloud-Based CRM: The Backbone of Modern Operations</h3><p>How cloud solutions are transforming service delivery — improving collaboration, security, and efficiency across distributed teams.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt2">🌍</div><div className="bbody"><div className="bmeta"><span className="bcat">Industry</span><span className="bdate">Feb 2026</span></div><h3>Why Indian Infotech Companies Are the Global Choice</h3><p>India's technology industry continues to lead globally — driven by skilled talent, cost advantages, and a culture of service excellence.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt3">🔐</div><div className="bbody"><div className="bmeta"><span className="bcat">Compliance</span><span className="bdate">Feb 2026</span></div><h3>Data Security: What Every Client Should Demand</h3><p>Your technology partner handles sensitive data. Here's what security practices and standards you should insist upon before signing any agreement.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt4">🚀</div><div className="bbody"><div className="bmeta"><span className="bcat">Startups & SMEs</span><span className="bdate">Jan 2026</span></div><h3>How Startups Can Scale Fast with Infotech Support</h3><p>For early-stage companies, outsourcing non-core operations to a technology partner can be the fastest path to scale without burning through runway.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt5">📊</div><div className="bbody"><div className="bmeta"><span className="bcat">Strategy</span><span className="bdate">Jan 2026</span></div><h3>5 Signs Your Business Is Ready to Outsource Operations</h3><p>Not sure if Infotech is right for you? These five signals indicate it's time to bring in an expert partner like Jupiter Infotech Services.</p><span className="rm">Read Article →</span></div></div>
             </div>
           </div>
         </section>
@@ -426,7 +426,7 @@ export default function App() {
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
         <section className="car-sec">
           <div className="car-i">
-            <div className="car-h rv"><div className="slabel">Join Our Team</div><h2>Build Your Career<br />at <span className="gt">Jupiter BPO</span></h2><p>We're looking for passionate, driven people to join a team redefining BPO services in Bangalore, Gulbarga, and Karnataka. Come grow with us.</p></div>
+            <div className="car-h rv"><div className="slabel">Join Our Team</div><h2>Build Your Career<br />at <span className="gt">Jupiter Infotech</span></h2><p>We're looking for passionate, driven people to join a team redefining technology services in Bangalore, Gulbarga, and Karnataka. Come grow with us.</p></div>
             <div className="perks rv">
               <div className="perk"><div className="perk-ico">🏥</div><h4>Health Benefits</h4><p>Medical coverage for you and your family, because we care about your wellbeing.</p></div>
               <div className="perk"><div className="perk-ico">📚</div><h4>Learning & Growth</h4><p>Continuous training, upskilling programs, and career development opportunities.</p></div>
@@ -457,7 +457,7 @@ export default function App() {
             <div className="cont-h rv">
               <div className="slabel">Contact Us</div>
               <h2>Get in <span className="gt">Touch</span></h2>
-              <p>Have questions or ready to start your journey with Jupiter BPO? Reach out to us through any of the channels below. Our team is ready to assist you.</p>
+              <p>Have questions or ready to start your journey with Jupiter Infotech? Reach out to us through any of the channels below. Our team is ready to assist you.</p>
             </div>
             <div className="cgrid">
               <div className="ccard rv" style={{ gridColumn: '1 / -1', maxWidth: '800px', margin: '0 auto' }}>
@@ -560,7 +560,7 @@ function Footer({ go }: { go: (id: string) => void }) {
             </linearGradient>
           </defs>
         </svg>
-        <span className="fl-t">Jupiter BPO</span>
+        <span className="fl-t">Jupiter Infotech</span>
       </div>
       <div className="flinks">
         <a onClick={() => go('about')}>About</a>
@@ -576,7 +576,7 @@ function Footer({ go }: { go: (id: string) => void }) {
           <br />
           ✉️ <a href="mailto:shaiksamad242@gmail.com">shaiksamad242@gmail.com</a>
         </div>
-        <div className="fcopy">© 2026 Jupiter BPO Services · Bangalore | Gulbarga | Karnataka</div>
+        <div className="fcopy">© 2026 Jupiter Infotech Services · Bangalore | Gulbarga | Karnataka</div>
       </div>
     </footer>
   );

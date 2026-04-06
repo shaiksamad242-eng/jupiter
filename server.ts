@@ -40,7 +40,7 @@ async function startServer() {
     });
 
     const mailOptions = {
-      from: `"Jupiter BPO System" <${smtpUser}>`,
+      from: `"Jupiter Infotech System" <${smtpUser}>`,
       to: "shaiksamad242@gmail.com",
       subject: `New Application: ${role} from ${name}`,
       text: `
