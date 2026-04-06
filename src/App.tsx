@@ -165,7 +165,7 @@ export default function App() {
           <div className="hero-inner">
             <div className="hbadge"><span className="bdot"></span>Infotech & Business Solutions</div>
             <div className="hloc">📍 Bangalore · Gulbarga · Karnataka</div>
-            <h1><span className="gt">Jupiter</span><br />Infotech Services</h1>
+            <h1><span className="gt">Jupiter</span><br />Infotech</h1>
             <p className="hero-sub">Quality, Efficiency, Innovation — delivering high-quality IT and business services that power your business growth and build lasting partnerships worldwide.</p>
             <div className="hbtns">
               <button className="btn-f" onClick={() => go('services')}>Our Services</button>
@@ -216,7 +216,7 @@ export default function App() {
             <div className="hw-text rvl">
               <div className="slabel">Why Jupiter Infotech</div>
               <h2>Quality, Efficiency,<br /><span className="gt">Innovation</span></h2>
-              <p>At Jupiter Infotech Services, we prioritize quality standards that ensure client satisfaction and optimal performance. Our commitment to excellence drives every aspect of our operations, fostering trust and reliability.</p>
+              <p>At Jupiter Infotech, we prioritize quality standards that ensure client satisfaction and optimal performance. Our commitment to excellence drives every aspect of our operations, fostering trust and reliability.</p>
               <p>We implement efficient processes that streamline workflows, reduce turnaround times, and enhance productivity — delivering cost-effective solutions that meet the evolving needs of our clients.</p>
               <button className="btn-f" onClick={() => go('about')} style={{ marginTop: '.6rem' }}>Learn More</button>
             </div>
@@ -234,7 +234,7 @@ export default function App() {
       {/* ===== ABOUT ===== */}
       <div className={`page ${activePage === 'about' ? 'active' : ''}`} id="pg-about">
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
-        <div className="about-hero"><h1>About Jupiter Infotech</h1><p>Quality, Efficiency, Innovation — the three pillars that define everything we do at Jupiter Infotech Services, based in Bangalore and Gulbarga, Karnataka.</p></div>
+        <div className="about-hero"><h1>About Jupiter Infotech</h1><p>Quality, Efficiency, Innovation — the three pillars that define everything we do at Jupiter Infotech, based in Bangalore and Gulbarga, Karnataka.</p></div>
         <section className="vals-sec">
           <div className="vi">
             <div className="rv" style={{ textAlign: 'center' }}><div className="slabel">Core Values</div><h2>What We <span className="gt">Stand For</span></h2></div>
@@ -386,7 +386,7 @@ export default function App() {
             <div className="test-h rv"><div className="slabel">Client Voices</div><h2>What Our Clients<br /><span className="gt">Say About Us</span></h2><p>Our commitment to quality and client satisfaction speaks through the words of those we partner with every day.</p></div>
             <div className="tfeat rv">
               <div className="stars"><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span><span className="star">★</span></div>
-              <p className="ttxt">"Jupiter Infotech Services transformed our customer support operations completely. Their team understood our business from day one, and the quality of service they deliver has directly contributed to a significant improvement in our customer satisfaction scores. We consider them a true long-term partner."</p>
+              <p className="ttxt">"Jupiter Infotech transformed our customer support operations completely. Their team understood our business from day one, and the quality of service they deliver has directly contributed to a significant improvement in our customer satisfaction scores. We consider them a true long-term partner."</p>
               <div className="tauth"><div className="tav">👔</div><div><div className="tname">Operations Head</div><div className="tco" style={{ color: 'rgba(255,255,255,.55)' }}>Leading E-commerce Company, Bangalore</div></div></div>
             </div>
             <div className="tgrid">
@@ -407,14 +407,14 @@ export default function App() {
         <div className="pt-nav"></div><div className="rainbow-bar"></div>
         <section className="blog-sec">
           <div className="blog-i">
-            <div className="blog-h rv"><div className="slabel">Insights & Ideas</div><h2>The Jupiter <span className="gt">Blog</span></h2><p>Thought leadership, industry insights, and practical advice from the experts at Jupiter Infotech Services.</p></div>
+            <div className="blog-h rv"><div className="slabel">Insights & Ideas</div><h2>The Jupiter <span className="gt">Blog</span></h2><p>Thought leadership, industry insights, and practical advice from the experts at Jupiter Infotech.</p></div>
             <div className="bgrid">
               <div className="bcard rv"><div className="bthumb bt0">📈</div><div className="bbody"><div className="bmeta"><span className="bcat">Operations</span><span className="bdate">Mar 2026</span></div><h3>How Quality-Driven Processes Boost Client Retention</h3><p>Explore how maintaining rigorous quality standards in operations directly translates to higher client retention and long-term partnerships.</p><span className="rm">Read Article →</span></div></div>
               <div className="bcard rv"><div className="bthumb bt1">☁️</div><div className="bbody"><div className="bmeta"><span className="bcat">Technology</span><span className="bdate">Mar 2026</span></div><h3>Cloud-Based CRM: The Backbone of Modern Operations</h3><p>How cloud solutions are transforming service delivery — improving collaboration, security, and efficiency across distributed teams.</p><span className="rm">Read Article →</span></div></div>
               <div className="bcard rv"><div className="bthumb bt2">🌍</div><div className="bbody"><div className="bmeta"><span className="bcat">Industry</span><span className="bdate">Feb 2026</span></div><h3>Why Indian Infotech Companies Are the Global Choice</h3><p>India's technology industry continues to lead globally — driven by skilled talent, cost advantages, and a culture of service excellence.</p><span className="rm">Read Article →</span></div></div>
               <div className="bcard rv"><div className="bthumb bt3">🔐</div><div className="bbody"><div className="bmeta"><span className="bcat">Compliance</span><span className="bdate">Feb 2026</span></div><h3>Data Security: What Every Client Should Demand</h3><p>Your technology partner handles sensitive data. Here's what security practices and standards you should insist upon before signing any agreement.</p><span className="rm">Read Article →</span></div></div>
               <div className="bcard rv"><div className="bthumb bt4">🚀</div><div className="bbody"><div className="bmeta"><span className="bcat">Startups & SMEs</span><span className="bdate">Jan 2026</span></div><h3>How Startups Can Scale Fast with Infotech Support</h3><p>For early-stage companies, outsourcing non-core operations to a technology partner can be the fastest path to scale without burning through runway.</p><span className="rm">Read Article →</span></div></div>
-              <div className="bcard rv"><div className="bthumb bt5">📊</div><div className="bbody"><div className="bmeta"><span className="bcat">Strategy</span><span className="bdate">Jan 2026</span></div><h3>5 Signs Your Business Is Ready to Outsource Operations</h3><p>Not sure if Infotech is right for you? These five signals indicate it's time to bring in an expert partner like Jupiter Infotech Services.</p><span className="rm">Read Article →</span></div></div>
+              <div className="bcard rv"><div className="bthumb bt5">📊</div><div className="bbody"><div className="bmeta"><span className="bcat">Strategy</span><span className="bdate">Jan 2026</span></div><h3>5 Signs Your Business Is Ready to Outsource Operations</h3><p>Not sure if Infotech is right for you? These five signals indicate it's time to bring in an expert partner like Jupiter Infotech.</p><span className="rm">Read Article →</span></div></div>
             </div>
           </div>
         </section>
@@ -576,7 +576,7 @@ function Footer({ go }: { go: (id: string) => void }) {
           <br />
           ✉️ <a href="mailto:shaiksamad242@gmail.com">shaiksamad242@gmail.com</a>
         </div>
-        <div className="fcopy">© 2026 Jupiter Infotech Services · Bangalore | Gulbarga | Karnataka</div>
+        <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka</div>
       </div>
     </footer>
   );
