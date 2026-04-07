@@ -4,6 +4,7 @@ import path from "path";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import cors from "cors";
+import fs from "fs";
 
 dotenv.config();
 
@@ -129,6 +130,11 @@ async function startServer() {
     }
   });
 
+  // API 404 catch-all
+  app.all("/api/*", (req, res) => {
+    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -138,10 +144,19 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    const rootIndex = path.join(process.cwd(), 'index.html');
+    
     console.log("Serving static files from:", distPath);
     app.use(express.static(distPath));
+    
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      // Try dist first, then root
+      const distIndex = path.join(distPath, 'index.html');
+      if (fs.existsSync(distIndex)) {
+        res.sendFile(distIndex);
+      } else {
+        res.sendFile(rootIndex);
+      }
     });
   }
 
