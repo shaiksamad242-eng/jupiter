@@ -38,8 +38,16 @@ export default function App() {
       });
 
       console.log("Response status:", response.status);
-      const result = await response.json();
-      console.log("Response body:", result);
+      const responseText = await response.text();
+      console.log("Response text (first 200 chars):", responseText.substring(0, 200));
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse response as JSON:", e);
+        throw new Error(`Server returned an invalid response format (likely HTML instead of JSON). Status: ${response.status}. Response starts with: ${responseText.substring(0, 50)}...`);
+      }
 
       if (response.ok) {
         setFormSubmitted(true);

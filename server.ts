@@ -5,6 +5,10 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import cors from "cors";
 import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -12,12 +16,26 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode...`);
+
   app.use(cors({ origin: '*' }));
   app.use(express.json());
 
+  // Request logger
+  app.use((req, res, next) => {
+    if (req.url.startsWith('/api')) {
+      console.log(`[API Request] ${req.method} ${req.url}`);
+    }
+    next();
+  });
+
   // Health check route
   app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", env: process.env.NODE_ENV });
+    res.json({ 
+      status: "ok", 
+      env: process.env.NODE_ENV,
+      time: new Date().toISOString()
+    });
   });
 
   // API Route for sending emails
@@ -132,36 +150,61 @@ async function startServer() {
 
   // API 404 catch-all
   app.all("/api/*", (req, res) => {
-    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
+    console.warn(`[API 404] ${req.method} ${req.url}`);
+    res.status(404).json({ 
+      error: `API route not found: ${req.method} ${req.url}`,
+      suggestion: "Check if the route is defined in server.ts and if the frontend is calling the correct URL."
+    });
   });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
+    console.log("Using Vite middleware...");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    const rootIndex = path.join(process.cwd(), 'index.html');
+    const distPath = path.resolve(__dirname, 'dist');
+    const rootIndex = path.resolve(__dirname, 'index.html');
     
-    console.log("Serving static files from:", distPath);
-    app.use(express.static(distPath));
+    console.log("Production mode: Serving static files from:", distPath);
+    
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+    } else {
+      console.warn("Warning: 'dist' directory not found. Falling back to root static serving.");
+    }
     
     app.get('*', (req, res) => {
       // Try dist first, then root
       const distIndex = path.join(distPath, 'index.html');
       if (fs.existsSync(distIndex)) {
         res.sendFile(distIndex);
-      } else {
+      } else if (fs.existsSync(rootIndex)) {
         res.sendFile(rootIndex);
+      } else {
+        res.status(404).send("Application entry point (index.html) not found.");
       }
     });
   }
 
+  // Global error handler
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error("[Global Error]", err);
+    res.status(500).json({ 
+      error: "Internal Server Error", 
+      message: err.message 
+    });
+  });
+
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
+    console.log("Available API routes:");
+    console.log("  GET  /api/health");
+    console.log("  POST /api/send-email");
+    console.log("  GET  /api/test-smtp");
   });
 }
 
