@@ -87,7 +87,8 @@ export default function App() {
         location: window.location.href,
         origin: window.location.origin,
         pathname: window.location.pathname,
-        apiResponse: data
+        apiResponse: data,
+        isNetlify: data.platform === 'netlify'
       };
       alert(`Debug Info:\n${JSON.stringify(debugInfo, null, 2)}`);
     } catch (err: any) {
