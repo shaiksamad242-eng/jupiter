@@ -28,9 +28,9 @@ export default function App() {
     console.log("Form data to submit:", data);
     
     try {
-      // Use absolute URL to avoid any relative path issues
-      const apiUrl = window.location.origin + "/api/send-email";
-      console.log("Submitting to absolute URL:", apiUrl);
+      // Use relative path to avoid origin issues
+      const apiUrl = "/api/send-email";
+      console.log("Submitting to relative URL:", apiUrl);
       
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -48,14 +48,18 @@ export default function App() {
       console.log("Response Headers:", Object.fromEntries(response.headers.entries()));
       
       const responseText = await response.text();
-      console.log("Response text (first 100 chars):", responseText.substring(0, 100));
+      console.log("Response text (first 200 chars):", responseText.substring(0, 200));
       
       let result;
       try {
         result = JSON.parse(responseText);
       } catch (e) {
         console.error("Failed to parse JSON response:", e);
-        throw new Error(`Server returned an invalid response format (likely HTML instead of JSON). Status: ${response.status}. Response starts with: ${responseText.substring(0, 50)}...`);
+        const isHtml = responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html');
+        const errorMessage = isHtml 
+          ? `The server returned a webpage instead of a data response. This usually means the API route was not found and you were redirected to the home page. Status: ${response.status}`
+          : `Server returned an invalid response format. Status: ${response.status}. Content starts with: ${responseText.substring(0, 50)}...`;
+        throw new Error(errorMessage);
       }
 
       if (response.ok) {
@@ -75,12 +79,19 @@ export default function App() {
 
   const checkApiStatus = async () => {
     try {
-      const apiUrl = window.location.origin + "/api/health";
+      const apiUrl = "/api/health";
+      console.log("Checking API status at:", apiUrl);
       const response = await fetch(apiUrl);
       const data = await response.json();
-      alert(`API Status: ${JSON.stringify(data, null, 2)}`);
+      const debugInfo = {
+        location: window.location.href,
+        origin: window.location.origin,
+        pathname: window.location.pathname,
+        apiResponse: data
+      };
+      alert(`Debug Info:\n${JSON.stringify(debugInfo, null, 2)}`);
     } catch (err: any) {
-      alert(`API Connection Failed: ${err.message}`);
+      alert(`API Connection Failed: ${err.message}\nURL: ${window.location.origin}/api/health\nPath: ${window.location.pathname}`);
     }
   };
 

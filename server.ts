@@ -24,44 +24,34 @@ async function startServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // --- DIAGNOSTIC LOGGER (Top Priority) ---
-  app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-    console.log(`[SERVER DEBUG] ${timestamp} ${req.method} ${req.url}`);
-    console.log(`  Path: ${req.path}`);
-    console.log(`  Headers: ${JSON.stringify(req.headers)}`);
-    next();
-  });
+  const VERSION = "1.0.6-router-implementation";
 
-  // --- API ROUTES (Direct Mount for Maximum Reliability) ---
-  
+  // --- API ROUTER ---
+  const apiRouter = express.Router();
+
   // Health check
-  app.get("/api/health", (req, res) => {
+  apiRouter.get("/health", (req, res) => {
     console.log(`[API Health Check] Hit from ${req.ip}`);
     res.json({ 
       status: "ok", 
+      version: VERSION,
       time: new Date().toISOString(),
       env: process.env.NODE_ENV || 'development',
-      url: req.url,
-      originalUrl: req.originalUrl
+      method: req.method,
+      url: req.url
     });
   });
 
   // Send Email Handler
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}, Original: ${req.originalUrl}`);
+    console.log(`[${new Date().toISOString()}] API: send-email. Method: ${req.method}`);
     
     if (req.method === 'GET') {
-      return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
-    }
-
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: "Method Not Allowed" });
+      return res.json({ message: "API is alive. Send a POST request.", status: "ok", version: VERSION });
     }
 
     const { name, email, phone, experience, role } = req.body;
-    console.log("Received data keys:", Object.keys(req.body || {}));
-
+    
     if (!name || !email) {
       return res.status(400).json({ error: "Name and Email are required." });
     }
@@ -72,8 +62,7 @@ async function startServer() {
     const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 
     if (!smtpUser || !smtpPass) {
-      console.error("SMTP credentials missing in environment variables.");
-      return res.status(500).json({ error: "SMTP credentials missing." });
+      return res.status(500).json({ error: "SMTP credentials missing on server." });
     }
 
     const transporter = nodemailer.createTransport({
@@ -98,50 +87,31 @@ async function startServer() {
           <p><strong>Experience:</strong> ${experience} years</p>
           <p><strong>Applied Role:</strong> ${role}</p>
           <hr />
-          <p style="font-size: 12px; color: #666;">This email was sent from your website's contact form.</p>
+          <p style="font-size: 12px; color: #666;">Sent from Jupiter Website.</p>
         </div>
       `,
     };
 
     try {
-      console.log("Attempting to send email via SMTP...");
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Email sent successfully:", info.messageId);
+      await transporter.sendMail(mailOptions);
       res.status(200).json({ message: "Success" });
     } catch (error: any) {
-      console.error("SMTP Error Details:", {
-        message: error.message,
-        code: error.code,
-        responseCode: error.responseCode,
-        command: error.command
-      });
-
-      let userFriendlyMessage = "Failed to send email. Please try again later.";
-      const smtpCode = error.responseCode || error.code;
-
-      if (smtpCode === 535 || error.message.includes('Authentication')) {
-        userFriendlyMessage = "Authentication failed. Please check your SMTP credentials (App Password).";
-      } else if (smtpCode === 'ETIMEDOUT' || smtpCode === 'ECONNREFUSED') {
-        userFriendlyMessage = "Could not connect to the mail server. Please check your internet connection or SMTP host settings.";
-      } else if (smtpCode === 550) {
-        userFriendlyMessage = "The recipient's mailbox is unavailable or the sender is blocked.";
-      }
-
+      console.error("SMTP Error:", error);
       res.status(500).json({ 
-        error: userFriendlyMessage,
-        details: {
-          code: smtpCode,
-          originalMessage: error.message
-        }
+        error: "Failed to send email.",
+        details: error.message,
+        code: error.code
       });
     }
   };
 
-  // Explicitly handle /api/send-email with POST
-  app.post("/api/send-email", handleSendEmail);
+  apiRouter.all("/send-email", handleSendEmail);
+  apiRouter.all("/send-email/", handleSendEmail);
+
+  // Mount the router
+  app.use("/api", apiRouter);
   
-  // Explicitly handle /api/send-email/ with POST
-  app.post("/api/send-email/", handleSendEmail);
+  // --- END API ROUTER ---
 
   // Test SMTP
   app.get("/api/test-smtp", async (req, res) => {
