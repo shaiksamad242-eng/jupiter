@@ -27,7 +27,9 @@ export default function App() {
     const data = Object.fromEntries(formData.entries());
     
     try {
-      const response = await fetch('/api/send-email', {
+      const apiUrl = '/api/send-email';
+      console.log("Fetching URL:", apiUrl);
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +37,9 @@ export default function App() {
         body: JSON.stringify(data),
       });
 
+      console.log("Response status:", response.status);
       const result = await response.json();
+      console.log("Response body:", result);
 
       if (response.ok) {
         setFormSubmitted(true);
@@ -46,7 +50,7 @@ export default function App() {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setFormError("A network error occurred. Please check your connection.");
+      setFormError(`A network error occurred: ${error instanceof Error ? error.message : String(error)}. Please check your connection.`);
     } finally {
       setIsSubmitting(false);
     }
