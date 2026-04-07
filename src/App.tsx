@@ -11,7 +11,6 @@ export default function App() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  const [debugResult, setDebugResult] = useState<string | null>(null);
 
   const go = (id: string) => {
     setActivePage(id);
@@ -78,39 +77,7 @@ export default function App() {
     }
   };
 
-  const checkApiStatus = async () => {
-    try {
-      const apiUrl = "/api/health";
-      console.log("Checking API status at:", apiUrl);
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      
-      // Also check SMTP status
-      let smtpStatus = "Not checked";
-      try {
-        const smtpRes = await fetch("/api/test-smtp");
-        const smtpData = await smtpRes.json();
-        smtpStatus = smtpData.status === "success" ? "✅ Connected" : `❌ Error: ${smtpData.message}`;
-      } catch (e) {
-        smtpStatus = "❌ Failed to reach SMTP test endpoint";
-      }
-
-      const debugInfo = {
-        location: window.location.href,
-        origin: window.location.origin,
-        pathname: window.location.pathname,
-        apiResponse: data,
-        isNetlify: data.platform === 'netlify',
-        smtpStatus: smtpStatus
-      };
-      setDebugResult(JSON.stringify(debugInfo, null, 2));
-    } catch (err: any) {
-      setDebugResult(`API Connection Failed: ${err.message}\nURL: ${window.location.origin}/api/health\nPath: ${window.location.pathname}`);
-    }
-  };
-
   useEffect(() => {
-    console.log("App Version: 2.0.1 - Netlify Ready");
     // Cursor Logic
     const cur = document.getElementById('cursor');
     const handleMouseMove = (e: MouseEvent) => {
@@ -564,43 +531,6 @@ export default function App() {
                       <button type="submit" className="btn-f" style={{ width: '100%', marginTop: '1rem', opacity: isSubmitting ? 0.7 : 1 }} disabled={isSubmitting}>
                         {isSubmitting ? 'Sending...' : 'Submit Application'}
                       </button>
-                      <button 
-                        type="button" 
-                        onClick={checkApiStatus}
-                        style={{ 
-                          width: '100%', 
-                          marginTop: '1rem', 
-                          background: 'rgba(255, 255, 255, 0.05)', 
-                          border: '2px solid #ff2d78', 
-                          color: '#ff2d78', 
-                          fontWeight: 'bold',
-                          fontSize: '0.8rem', 
-                          padding: '0.75rem', 
-                          borderRadius: '8px', 
-                          cursor: 'pointer',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}
-                      >
-                        DEBUG: Check API & SMTP Status
-                      </button>
-                      {debugResult && (
-                        <div style={{ marginTop: '1rem', background: '#111', padding: '1rem', borderRadius: '8px', border: '1px solid #333' }}>
-                          <p style={{ color: '#ff2d78', fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>DEBUG OUTPUT (Copy this):</p>
-                          <textarea 
-                            readOnly 
-                            value={debugResult} 
-                            style={{ width: '100%', height: '150px', background: 'transparent', border: 'none', color: '#0f0', fontFamily: 'monospace', fontSize: '0.7rem', outline: 'none' }}
-                            onClick={(e) => (e.target as HTMLTextAreaElement).select()}
-                          />
-                          <button 
-                            onClick={() => setDebugResult(null)}
-                            style={{ marginTop: '0.5rem', background: '#333', color: '#fff', border: 'none', padding: '0.3rem 0.6rem', borderRadius: '4px', fontSize: '0.6rem', cursor: 'pointer' }}
-                          >
-                            Close Debug
-                          </button>
-                        </div>
-                      )}
                     </form>
                   </>
                 )}
@@ -672,7 +602,7 @@ function Footer({ go }: { go: (id: string) => void }) {
           <br />
           ✉️ <a href="mailto:gm@jupiterinfotech.co.in">gm@jupiterinfotech.co.in</a> · <a href="mailto:manager@jupiterinfotech.co.in">manager@jupiterinfotech.co.in</a>
         </div>
-        <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka · v2.0.1</div>
+        <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka</div>
       </div>
     </footer>
   );
