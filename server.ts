@@ -17,6 +17,8 @@ async function startServer() {
   const PORT = 3000;
 
   console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode...`);
+  console.log(`Current directory: ${process.cwd()}`);
+  console.log(`__dirname: ${__dirname}`);
 
   app.use(cors({ origin: '*' }));
   app.use(express.json());
@@ -24,15 +26,15 @@ async function startServer() {
   // Global Request Logger
   app.use((req, res, next) => {
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${req.method} ${req.path} - Query: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify({
-      'content-type': req.headers['content-type'],
-      'user-agent': req.headers['user-agent']?.substring(0, 50) + '...'
-    })}`);
+    console.log(`[${timestamp}] ${req.method} ${req.path}`);
     next();
   });
 
+  // Create an API Router
+  const apiRouter = express.Router();
+
   // Health check route
-  app.get("/api/health", (req, res) => {
+  apiRouter.get("/health", (req, res) => {
     res.json({ 
       status: "ok", 
       env: process.env.NODE_ENV,
@@ -42,12 +44,16 @@ async function startServer() {
   });
 
   // Simple ping for connectivity testing
-  app.get("/api/ping", (req, res) => {
+  apiRouter.get("/ping", (req, res) => {
     res.json({ message: "pong", time: new Date().toISOString() });
   });
 
   // API Route for sending emails
-  const handleSendEmail = async (req: express.Request, res: express.Response) => {
+  apiRouter.get("/send-email", (req, res) => {
+    res.json({ message: "This endpoint only accepts POST requests for sending emails.", status: "alive" });
+  });
+
+  apiRouter.post("/send-email", async (req, res) => {
     console.log(`[${new Date().toISOString()}] POST /api/send-email received`);
     console.log("Body keys:", Object.keys(req.body));
     
@@ -131,13 +137,10 @@ async function startServer() {
       
       res.status(500).json({ error: errorMessage });
     }
-  };
-
-  app.post("/api/send-email", handleSendEmail);
-  app.post("/api/send-email/", handleSendEmail);
+  });
 
   // Test SMTP connection route
-  app.get("/api/test-smtp", async (req, res) => {
+  apiRouter.get("/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
 
@@ -160,6 +163,9 @@ async function startServer() {
       res.json({ status: "error", message: error.message });
     }
   });
+
+  // Mount the API Router
+  app.use("/api", apiRouter);
 
   // API 404 catch-all
   app.all("/api/*", (req, res) => {

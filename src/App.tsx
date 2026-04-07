@@ -25,6 +25,7 @@ export default function App() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    console.log("Form data to submit:", data);
     
     try {
       const fullUrl = `${window.location.origin}/api/send-email`;
