@@ -53,7 +53,7 @@ const handler: Handler = async (event, context) => {
 
   const mailOptions = {
     from: `"Jupiter Website Form" <${smtpUser}>`,
-    to: "manager@jupiterinfotech.co.in",
+    to: `manager@jupiterinfotech.co.in, ${smtpUser}`,
     replyTo: email,
     subject: `New Application: ${role} from ${name}`,
     html: `
