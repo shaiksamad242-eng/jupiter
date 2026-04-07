@@ -28,37 +28,28 @@ async function startServer() {
   app.use((req, res, next) => {
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] ${req.method} ${req.url} (Path: ${req.path})`);
+    console.log(`  Headers: ${JSON.stringify(req.headers)}`);
     next();
   });
 
-  // Health check route
+  // --- API ROUTES START (High Priority) ---
+  
+  // Health check
   app.get("/api/health", (req, res) => {
-    res.json({ 
-      status: "ok", 
-      env: process.env.NODE_ENV,
-      time: new Date().toISOString(),
-      headers: req.headers
-    });
+    res.json({ status: "ok", time: new Date().toISOString() });
   });
 
-  // Simple ping for connectivity testing
+  // Ping
   app.get("/api/ping", (req, res) => {
-    res.json({ message: "pong", time: new Date().toISOString() });
+    res.json({ message: "pong" });
   });
 
-  // API Route for sending emails
+  // Send Email Handler
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl || req.url} hit!`);
+    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}`);
     
-    // Handle GET for debugging
     if (req.method === 'GET') {
-      return res.json({ 
-        message: "API is alive. Send a POST request to submit.", 
-        status: "ok",
-        method: req.method,
-        url: req.url,
-        path: req.path
-      });
+      return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
     }
 
     if (req.method !== 'POST') {
@@ -76,6 +67,7 @@ async function startServer() {
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
 
     if (!smtpUser || !smtpPass) {
+      console.error("SMTP credentials missing in environment variables.");
       return res.status(500).json({ error: "SMTP credentials missing." });
     }
 
@@ -104,7 +96,9 @@ async function startServer() {
     };
 
     try {
-      await transporter.sendMail(mailOptions);
+      console.log("Attempting to send email via SMTP...");
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully:", info.messageId);
       res.status(200).json({ message: "Success" });
     } catch (error: any) {
       console.error("SMTP Error:", error);
@@ -112,17 +106,16 @@ async function startServer() {
     }
   };
 
-  app.use("/api/send-email", handleSendEmail);
-  
-  // Test SMTP connection route
+  // Explicitly handle both with and without trailing slash for POST and GET
+  app.post("/api/send-email", handleSendEmail);
+  app.post("/api/send-email/", handleSendEmail);
+  app.get("/api/send-email", handleSendEmail);
+  app.get("/api/send-email/", handleSendEmail);
+
+  // Test SMTP
   app.get("/api/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
-
-    if (!smtpUser || !smtpPass) {
-      return res.json({ status: "error", message: "Missing credentials" });
-    }
-
     const transporter = nodemailer.createTransport({
       host: 'smtpout.secureserver.net',
       port: 465,
@@ -130,23 +123,21 @@ async function startServer() {
       auth: { user: smtpUser, pass: smtpPass },
       tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' }
     });
-
     try {
       await transporter.verify();
-      res.json({ status: "success", message: "SMTP Connection is valid!" });
+      res.json({ status: "success" });
     } catch (error: any) {
       res.json({ status: "error", message: error.message });
     }
   });
 
-  // API 404 catch-all
+  // API 404
   app.all("/api/*", (req, res) => {
-    console.warn(`[API 404] ${req.method} ${req.path}`);
-    res.status(404).json({ 
-      error: `API route not found: ${req.method} ${req.path}`,
-      suggestion: "Check if the route is defined in server.ts and if the frontend is calling the correct URL."
-    });
+    console.warn(`[API 404] ${req.method} ${req.url}`);
+    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
   });
+
+  // --- API ROUTES END ---
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

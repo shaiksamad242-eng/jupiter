@@ -43,6 +43,7 @@ export default function App() {
       console.log("Response status:", response.status);
       console.log("Response URL:", response.url);
       console.log("Response redirected:", response.redirected);
+      console.log("Response type:", response.type);
       
       const responseText = await response.text();
       console.log("Response text (first 100 chars):", responseText.substring(0, 100));
@@ -51,7 +52,7 @@ export default function App() {
       try {
         result = JSON.parse(responseText);
       } catch (e) {
-        console.error("Failed to parse response as JSON:", e);
+        console.error("Failed to parse JSON response:", e);
         throw new Error(`Server returned an invalid response format (likely HTML instead of JSON). Status: ${response.status}. Response starts with: ${responseText.substring(0, 50)}...`);
       }
 
