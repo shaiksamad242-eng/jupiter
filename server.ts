@@ -22,6 +22,7 @@ async function startServer() {
 
   app.use(cors({ origin: '*' }));
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // Global Request Logger
   app.use((req, res, next) => {
@@ -30,11 +31,8 @@ async function startServer() {
     next();
   });
 
-  // Create an API Router
-  const apiRouter = express.Router();
-
   // Health check route
-  apiRouter.get("/health", (req, res) => {
+  app.get("/api/health", (req, res) => {
     res.json({ 
       status: "ok", 
       env: process.env.NODE_ENV,
@@ -44,16 +42,16 @@ async function startServer() {
   });
 
   // Simple ping for connectivity testing
-  apiRouter.get("/ping", (req, res) => {
+  app.get("/api/ping", (req, res) => {
     res.json({ message: "pong", time: new Date().toISOString() });
   });
 
   // API Route for sending emails
-  apiRouter.get("/send-email", (req, res) => {
+  app.get("/api/send-email", (req, res) => {
     res.json({ message: "This endpoint only accepts POST requests for sending emails.", status: "alive" });
   });
 
-  apiRouter.post("/send-email", async (req, res) => {
+  app.post("/api/send-email", async (req, res) => {
     console.log(`[${new Date().toISOString()}] POST /api/send-email received`);
     console.log("Body keys:", Object.keys(req.body));
     
@@ -140,7 +138,7 @@ async function startServer() {
   });
 
   // Test SMTP connection route
-  apiRouter.get("/test-smtp", async (req, res) => {
+  app.get("/api/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
 
@@ -164,14 +162,11 @@ async function startServer() {
     }
   });
 
-  // Mount the API Router
-  app.use("/api", apiRouter);
-
   // API 404 catch-all
   app.all("/api/*", (req, res) => {
-    console.warn(`[API 404] ${req.method} ${req.url}`);
+    console.warn(`[API 404] ${req.method} ${req.path}`);
     res.status(404).json({ 
-      error: `API route not found: ${req.method} ${req.url}`,
+      error: `API route not found: ${req.method} ${req.path}`,
       suggestion: "Check if the route is defined in server.ts and if the frontend is calling the correct URL."
     });
   });
@@ -197,6 +192,7 @@ async function startServer() {
     }
     
     app.get('*', (req, res) => {
+      console.log(`[Static Catch-all] GET ${req.path}`);
       // Try dist first, then root
       const distIndex = path.join(distPath, 'index.html');
       if (fs.existsSync(distIndex)) {
@@ -208,6 +204,16 @@ async function startServer() {
       }
     });
   }
+
+  // Final catch-all for any unhandled POST/PUT/DELETE requests
+  app.all('*', (req, res) => {
+    console.warn(`[Final Catch-all] ${req.method} ${req.path}`);
+    if (req.path.startsWith('/api')) {
+      res.status(404).json({ error: `API endpoint not found: ${req.method} ${req.path}` });
+    } else {
+      res.status(404).send(`Cannot ${req.method} ${req.path}`);
+    }
+  });
 
   // Global error handler
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
