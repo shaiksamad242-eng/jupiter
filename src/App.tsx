@@ -28,8 +28,9 @@ export default function App() {
     console.log("Form data to submit:", data);
     
     try {
-      const apiUrl = "/api/send-email";
-      console.log("Submitting to:", apiUrl);
+      // Use absolute URL to avoid any relative path issues
+      const apiUrl = window.location.origin + "/api/send-email";
+      console.log("Submitting to absolute URL:", apiUrl);
       
       const response = await fetch(apiUrl, {
         method: 'POST',

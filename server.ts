@@ -24,16 +24,14 @@ async function startServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Global Request Logger
-  app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${req.method} ${req.url} (Path: ${req.path})`);
-    console.log(`  Headers: ${JSON.stringify(req.headers)}`);
+  // --- API ROUTES START (Absolute Priority) ---
+  const apiRouter = express.Router();
+
+  // Diagnostic logger for API router
+  apiRouter.use((req, res, next) => {
+    console.log(`[API Router Debug] ${req.method} ${req.url}`);
     next();
   });
-
-  // --- API ROUTES (Isolated in Router) ---
-  const apiRouter = express.Router();
 
   // Health check
   apiRouter.get("/health", (req, res) => {
@@ -47,7 +45,7 @@ async function startServer() {
 
   // Send Email Handler
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] API Router: ${req.method} /api/send-email hit!`);
+    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}`);
     
     if (req.method === 'GET') {
       return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
@@ -84,7 +82,7 @@ async function startServer() {
     const mailOptions = {
       from: `"Jupiter Website Form" <${smtpUser}>`,
       to: "manager@jupiterinfotech.co.in",
-      replyTo: email, // This allows you to click 'Reply' in Gmail to respond to the user
+      replyTo: email,
       subject: `New Application: ${role} from ${name}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
@@ -143,11 +141,11 @@ async function startServer() {
 
   // API Catch-all (Ensures /api/* always returns JSON, never HTML)
   apiRouter.all("*", (req, res) => {
-    console.warn(`[API Router 404] ${req.method} ${req.originalUrl}`);
+    console.warn(`[API Router 404] ${req.method} ${req.originalUrl || req.url}`);
     res.status(404).json({ 
       error: "API route not found",
       method: req.method,
-      url: req.originalUrl
+      url: req.originalUrl || req.url
     });
   });
 
@@ -155,6 +153,13 @@ async function startServer() {
   app.use("/api", apiRouter);
 
   // --- API ROUTES END ---
+
+  // Global Request Logger (Moved after API routes to catch what's left)
+  app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] NON-API REQUEST: ${req.method} ${req.url} (Path: ${req.path})`);
+    next();
+  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
