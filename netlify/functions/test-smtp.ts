@@ -7,12 +7,14 @@ const handler: Handler = async (event, context) => {
   const smtpHost = (process.env.SMTP_HOST || "smtp.gmail.com").trim();
   const smtpPort = parseInt(process.env.SMTP_PORT || "465");
 
+  const maskedUser = smtpUser ? `${smtpUser.substring(0, 3)}...${smtpUser.split('@')[1]}` : "MISSING";
+
   if (!smtpUser || !smtpPass) {
     return {
       statusCode: 200,
       body: JSON.stringify({ 
         status: "error", 
-        message: "SMTP credentials (SMTP_USER or SMTP_PASS) are missing in Netlify environment variables." 
+        message: `SMTP credentials missing. Current User: ${maskedUser}` 
       }),
     };
   }
