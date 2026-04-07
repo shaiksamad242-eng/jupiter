@@ -46,9 +46,11 @@ async function startServer() {
     res.json({ message: "pong", time: new Date().toISOString() });
   });
 
-  // API Route for sending emails - handling both with and without trailing slash
+  // API Route for sending emails
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log("Processing /api/send-email request body:", JSON.stringify(req.body).substring(0, 200) + "...");
+    console.log(`[${new Date().toISOString()}] POST /api/send-email received`);
+    console.log("Body keys:", Object.keys(req.body));
+    
     const { name, email, phone, experience, role } = req.body;
 
     // Check for SMTP credentials

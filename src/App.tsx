@@ -27,12 +27,14 @@ export default function App() {
     const data = Object.fromEntries(formData.entries());
     
     try {
-      const apiUrl = '/api/send-email';
-      console.log("Fetching URL:", apiUrl);
-      const response = await fetch(apiUrl, {
+      const fullUrl = `${window.location.origin}/api/send-email`;
+      console.log("Submitting to:", fullUrl);
+      
+      const response = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(data),
       });
