@@ -27,7 +27,7 @@ async function startServer() {
   // Global Request Logger
   app.use((req, res, next) => {
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${req.method} ${req.path}`);
+    console.log(`[${timestamp}] ${req.method} ${req.url} (Path: ${req.path})`);
     next();
   });
 
@@ -47,95 +47,66 @@ async function startServer() {
   });
 
   // API Route for sending emails
-  app.get("/api/send-email", (req, res) => {
-    res.json({ message: "This endpoint only accepts POST requests for sending emails.", status: "alive" });
-  });
-
-  app.post("/api/send-email", async (req, res) => {
-    console.log(`[${new Date().toISOString()}] POST /api/send-email received`);
-    console.log("Body keys:", Object.keys(req.body));
+  const handleSendEmail = async (req: express.Request, res: express.Response) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} hit!`);
     
-    const { name, email, phone, experience, role } = req.body;
+    if (req.method === 'GET') {
+      return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
+    }
 
-    // Check for SMTP credentials
-    const smtpHost = 'smtpout.secureserver.net';
-    const smtpPort = '465';
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: "Method Not Allowed" });
+    }
+
+    const { name, email, phone, experience, role } = req.body;
+    console.log("Body keys:", Object.keys(req.body || {}));
+
+    if (!name || !email) {
+      return res.status(400).json({ error: "Name and Email are required." });
+    }
+
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
 
     if (!smtpUser || !smtpPass) {
-      return res.status(500).json({ 
-        error: "Missing SMTP_USER or SMTP_PASS in Secrets." 
-      });
+      return res.status(500).json({ error: "SMTP credentials missing." });
     }
 
     const transporter = nodemailer.createTransport({
-      host: smtpHost,
+      host: 'smtpout.secureserver.net',
       port: 465,
       secure: true,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-      tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2'
-      }
+      auth: { user: smtpUser, pass: smtpPass },
+      tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' }
     });
 
     const mailOptions = {
       from: `"Jupiter Infotech System" <${smtpUser}>`,
       to: "manager@jupiterinfotech.co.in",
       subject: `New Application: ${role} from ${name}`,
-      text: `
-        New Application Details:
-        ------------------------
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        Experience: ${experience} years
-        Role: ${role}
-      `,
       html: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2 style="color: #ff2d78;">New Application Details</h2>
+        <div style="font-family: sans-serif; padding: 20px;">
+          <h2>New Application</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Phone:</strong> ${phone}</p>
           <p><strong>Experience:</strong> ${experience} years</p>
           <p><strong>Role:</strong> ${role}</p>
-          <hr />
-          <p style="font-size: 0.8rem; color: #666;">Sent from Jupiter Infotech System Portal</p>
         </div>
       `,
     };
 
     try {
-      console.log("Sending mail...");
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Email sent successfully:", info.messageId);
-      res.status(200).json({ message: "Email sent successfully!" });
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ message: "Success" });
     } catch (error: any) {
-      console.error("Detailed SMTP Error:", error);
-      let errorMessage = "Failed to send email. Check server logs for details.";
-      
-      if (error.code === 'ENOTFOUND') {
-        errorMessage = `Could not find SMTP host "${smtpHost}". Please ensure SMTP_HOST is set to "smtp.titan.email" in the Secrets menu.`;
-      } else if (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET') {
-        errorMessage = `Connection Timed Out to ${smtpHost}. Titan Email (GoDaddy) is currently blocking the connection. 
-        
-        FIX: 
-        1. Try changing SMTP_PORT to "587" in Secrets.
-        2. If that fails, Titan is blocking cloud servers. Please use a Gmail account with an "App Password" instead for 100% reliability.`;
-      } else if (error.code === 'EAUTH' || error.responseCode === 535) {
-        errorMessage = "Authentication failed. Please check if SMTP_USER and SMTP_PASS are correct in the Secrets menu.";
-      } else if (error.message) {
-        errorMessage = `SMTP Error: ${error.message}`;
-      }
-      
-      res.status(500).json({ error: errorMessage });
+      console.error("SMTP Error:", error);
+      res.status(500).json({ error: error.message });
     }
-  });
+  };
+
+  app.all("/api/send-email", handleSendEmail);
+  app.all("/api/send-email/", handleSendEmail);
 
   // Test SMTP connection route
   app.get("/api/test-smtp", async (req, res) => {

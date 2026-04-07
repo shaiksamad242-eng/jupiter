@@ -41,8 +41,11 @@ export default function App() {
       });
 
       console.log("Response status:", response.status);
+      console.log("Response URL:", response.url);
+      console.log("Response redirected:", response.redirected);
+      
       const responseText = await response.text();
-      console.log("Response text (first 200 chars):", responseText.substring(0, 200));
+      console.log("Response text (first 100 chars):", responseText.substring(0, 100));
       
       let result;
       try {
