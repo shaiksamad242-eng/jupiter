@@ -11,6 +11,7 @@ export default function App() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [debugResult, setDebugResult] = useState<string | null>(null);
 
   const go = (id: string) => {
     setActivePage(id);
@@ -102,9 +103,9 @@ export default function App() {
         isNetlify: data.platform === 'netlify',
         smtpStatus: smtpStatus
       };
-      alert(`Debug Info:\n${JSON.stringify(debugInfo, null, 2)}`);
+      setDebugResult(JSON.stringify(debugInfo, null, 2));
     } catch (err: any) {
-      alert(`API Connection Failed: ${err.message}\nURL: ${window.location.origin}/api/health\nPath: ${window.location.pathname}`);
+      setDebugResult(`API Connection Failed: ${err.message}\nURL: ${window.location.origin}/api/health\nPath: ${window.location.pathname}`);
     }
   };
 
@@ -583,6 +584,23 @@ export default function App() {
                       >
                         DEBUG: Check API & SMTP Status
                       </button>
+                      {debugResult && (
+                        <div style={{ marginTop: '1rem', background: '#111', padding: '1rem', borderRadius: '8px', border: '1px solid #333' }}>
+                          <p style={{ color: '#ff2d78', fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>DEBUG OUTPUT (Copy this):</p>
+                          <textarea 
+                            readOnly 
+                            value={debugResult} 
+                            style={{ width: '100%', height: '150px', background: 'transparent', border: 'none', color: '#0f0', fontFamily: 'monospace', fontSize: '0.7rem', outline: 'none' }}
+                            onClick={(e) => (e.target as HTMLTextAreaElement).select()}
+                          />
+                          <button 
+                            onClick={() => setDebugResult(null)}
+                            style={{ marginTop: '0.5rem', background: '#333', color: '#fff', border: 'none', padding: '0.3rem 0.6rem', borderRadius: '4px', fontSize: '0.6rem', cursor: 'pointer' }}
+                          >
+                            Close Debug
+                          </button>
+                        </div>
+                      )}
                     </form>
                   </>
                 )}
