@@ -21,11 +21,13 @@ async function startServer() {
   app.use(cors({ origin: '*' }));
   app.use(express.json());
 
-  // Request logger
+  // Global Request Logger
   app.use((req, res, next) => {
-    if (req.url.startsWith('/api')) {
-      console.log(`[API Request] ${req.method} ${req.url}`);
-    }
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${req.method} ${req.path} - Query: ${JSON.stringify(req.query)} - Headers: ${JSON.stringify({
+      'content-type': req.headers['content-type'],
+      'user-agent': req.headers['user-agent']?.substring(0, 50) + '...'
+    })}`);
     next();
   });
 
@@ -34,13 +36,19 @@ async function startServer() {
     res.json({ 
       status: "ok", 
       env: process.env.NODE_ENV,
-      time: new Date().toISOString()
+      time: new Date().toISOString(),
+      headers: req.headers
     });
   });
 
-  // API Route for sending emails
-  app.post("/api/send-email", async (req, res) => {
-    console.log("Received POST request to /api/send-email", req.body);
+  // Simple ping for connectivity testing
+  app.get("/api/ping", (req, res) => {
+    res.json({ message: "pong", time: new Date().toISOString() });
+  });
+
+  // API Route for sending emails - handling both with and without trailing slash
+  const handleSendEmail = async (req: express.Request, res: express.Response) => {
+    console.log("Processing /api/send-email request body:", JSON.stringify(req.body).substring(0, 200) + "...");
     const { name, email, phone, experience, role } = req.body;
 
     // Check for SMTP credentials
@@ -121,7 +129,10 @@ async function startServer() {
       
       res.status(500).json({ error: errorMessage });
     }
-  });
+  };
+
+  app.post("/api/send-email", handleSendEmail);
+  app.post("/api/send-email/", handleSendEmail);
 
   // Test SMTP connection route
   app.get("/api/test-smtp", async (req, res) => {
