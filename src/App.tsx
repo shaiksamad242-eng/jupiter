@@ -109,6 +109,7 @@ export default function App() {
   };
 
   useEffect(() => {
+    console.log("App Version: 2.0.1 - Netlify Ready");
     // Cursor Logic
     const cur = document.getElementById('cursor');
     const handleMouseMove = (e: MouseEvent) => {
@@ -565,9 +566,22 @@ export default function App() {
                       <button 
                         type="button" 
                         onClick={checkApiStatus}
-                        style={{ width: '100%', marginTop: '0.5rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer' }}
+                        style={{ 
+                          width: '100%', 
+                          marginTop: '1rem', 
+                          background: 'rgba(255, 255, 255, 0.05)', 
+                          border: '2px solid #ff2d78', 
+                          color: '#ff2d78', 
+                          fontWeight: 'bold',
+                          fontSize: '0.8rem', 
+                          padding: '0.75rem', 
+                          borderRadius: '8px', 
+                          cursor: 'pointer',
+                          textTransform: 'uppercase',
+                          letterSpacing: '1px'
+                        }}
                       >
-                        Check API Connection Status
+                        DEBUG: Check API & SMTP Status
                       </button>
                     </form>
                   </>
@@ -640,7 +654,7 @@ function Footer({ go }: { go: (id: string) => void }) {
           <br />
           ✉️ <a href="mailto:gm@jupiterinfotech.co.in">gm@jupiterinfotech.co.in</a> · <a href="mailto:manager@jupiterinfotech.co.in">manager@jupiterinfotech.co.in</a>
         </div>
-        <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka</div>
+        <div className="fcopy">© 2026 Jupiter Infotech · Bangalore | Gulbarga | Karnataka · v2.0.1</div>
       </div>
     </footer>
   );
