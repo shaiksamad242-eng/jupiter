@@ -13,6 +13,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/test-smtp"
+  to = "/.netlify/functions/test-smtp"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

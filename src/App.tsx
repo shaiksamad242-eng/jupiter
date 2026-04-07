@@ -83,12 +83,24 @@ export default function App() {
       console.log("Checking API status at:", apiUrl);
       const response = await fetch(apiUrl);
       const data = await response.json();
+      
+      // Also check SMTP status
+      let smtpStatus = "Not checked";
+      try {
+        const smtpRes = await fetch("/api/test-smtp");
+        const smtpData = await smtpRes.json();
+        smtpStatus = smtpData.status === "success" ? "✅ Connected" : `❌ Error: ${smtpData.message}`;
+      } catch (e) {
+        smtpStatus = "❌ Failed to reach SMTP test endpoint";
+      }
+
       const debugInfo = {
         location: window.location.href,
         origin: window.location.origin,
         pathname: window.location.pathname,
         apiResponse: data,
-        isNetlify: data.platform === 'netlify'
+        isNetlify: data.platform === 'netlify',
+        smtpStatus: smtpStatus
       };
       alert(`Debug Info:\n${JSON.stringify(debugInfo, null, 2)}`);
     } catch (err: any) {
