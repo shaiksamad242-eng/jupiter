@@ -32,21 +32,22 @@ async function startServer() {
     next();
   });
 
-  // --- API ROUTES START (High Priority) ---
-  
+  // --- API ROUTES (Isolated in Router) ---
+  const apiRouter = express.Router();
+
   // Health check
-  app.get("/api/health", (req, res) => {
+  apiRouter.get("/health", (req, res) => {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
   // Ping
-  app.get("/api/ping", (req, res) => {
+  apiRouter.get("/ping", (req, res) => {
     res.json({ message: "pong" });
   });
 
   // Send Email Handler
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}`);
+    console.log(`[${new Date().toISOString()}] API Router: ${req.method} /api/send-email hit!`);
     
     if (req.method === 'GET') {
       return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
@@ -65,6 +66,8 @@ async function startServer() {
 
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
+    const smtpHost = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
+    const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 
     if (!smtpUser || !smtpPass) {
       console.error("SMTP credentials missing in environment variables.");
@@ -72,25 +75,28 @@ async function startServer() {
     }
 
     const transporter = nodemailer.createTransport({
-      host: 'smtpout.secureserver.net',
-      port: 465,
-      secure: true,
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
       auth: { user: smtpUser, pass: smtpPass },
-      tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' }
     });
 
     const mailOptions = {
-      from: `"Jupiter Infotech System" <${smtpUser}>`,
+      from: `"Jupiter Website Form" <${smtpUser}>`,
       to: "manager@jupiterinfotech.co.in",
+      replyTo: email, // This allows you to click 'Reply' in Gmail to respond to the user
       subject: `New Application: ${role} from ${name}`,
       html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h2>New Application</h2>
-          <p><strong>Name:</strong> ${name}</p>
+        <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+          <h2 style="color: #2563eb;">New Career Application</h2>
+          <hr />
+          <p><strong>Applicant Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Phone:</strong> ${phone}</p>
           <p><strong>Experience:</strong> ${experience} years</p>
-          <p><strong>Role:</strong> ${role}</p>
+          <p><strong>Applied Role:</strong> ${role}</p>
+          <hr />
+          <p style="font-size: 12px; color: #666;">This email was sent from your website's contact form.</p>
         </div>
       `,
     };
@@ -106,36 +112,47 @@ async function startServer() {
     }
   };
 
-  // Explicitly handle both with and without trailing slash for POST and GET
-  app.post("/api/send-email", handleSendEmail);
-  app.post("/api/send-email/", handleSendEmail);
-  app.get("/api/send-email", handleSendEmail);
-  app.get("/api/send-email/", handleSendEmail);
+  // Handle /send-email and /send-email/
+  apiRouter.all("/send-email", handleSendEmail);
+  apiRouter.all("/send-email/", handleSendEmail);
 
   // Test SMTP
-  app.get("/api/test-smtp", async (req, res) => {
+  apiRouter.get("/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
+    const smtpHost = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
+    const smtpPort = parseInt(process.env.SMTP_PORT || '465');
+
     const transporter = nodemailer.createTransport({
-      host: 'smtpout.secureserver.net',
-      port: 465,
-      secure: true,
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
       auth: { user: smtpUser, pass: smtpPass },
-      tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' }
     });
     try {
       await transporter.verify();
-      res.json({ status: "success" });
+      res.json({ 
+        status: "success", 
+        message: "SMTP Connection verified!",
+        details: { host: smtpHost, port: smtpPort, user: smtpUser }
+      });
     } catch (error: any) {
       res.json({ status: "error", message: error.message });
     }
   });
 
-  // API 404
-  app.all("/api/*", (req, res) => {
-    console.warn(`[API 404] ${req.method} ${req.url}`);
-    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
+  // API Catch-all (Ensures /api/* always returns JSON, never HTML)
+  apiRouter.all("*", (req, res) => {
+    console.warn(`[API Router 404] ${req.method} ${req.originalUrl}`);
+    res.status(404).json({ 
+      error: "API route not found",
+      method: req.method,
+      url: req.originalUrl
+    });
   });
+
+  // Mount the router
+  app.use("/api", apiRouter);
 
   // --- API ROUTES END ---
 
