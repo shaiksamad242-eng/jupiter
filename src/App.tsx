@@ -28,10 +28,10 @@ export default function App() {
     console.log("Form data to submit:", data);
     
     try {
-      const fullUrl = `${window.location.origin}/api/send-email`;
-      console.log("Submitting to:", fullUrl);
+      const apiUrl = "/api/send-email";
+      console.log("Submitting to:", apiUrl);
       
-      const response = await fetch(fullUrl, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

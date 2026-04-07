@@ -48,10 +48,17 @@ async function startServer() {
 
   // API Route for sending emails
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} hit!`);
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl || req.url} hit!`);
     
+    // Handle GET for debugging
     if (req.method === 'GET') {
-      return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
+      return res.json({ 
+        message: "API is alive. Send a POST request to submit.", 
+        status: "ok",
+        method: req.method,
+        url: req.url,
+        path: req.path
+      });
     }
 
     if (req.method !== 'POST') {
@@ -59,7 +66,7 @@ async function startServer() {
     }
 
     const { name, email, phone, experience, role } = req.body;
-    console.log("Body keys:", Object.keys(req.body || {}));
+    console.log("Received data keys:", Object.keys(req.body || {}));
 
     if (!name || !email) {
       return res.status(400).json({ error: "Name and Email are required." });
@@ -105,9 +112,8 @@ async function startServer() {
     }
   };
 
-  app.all("/api/send-email", handleSendEmail);
-  app.all("/api/send-email/", handleSendEmail);
-
+  app.use("/api/send-email", handleSendEmail);
+  
   // Test SMTP connection route
   app.get("/api/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
