@@ -24,28 +24,32 @@ async function startServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // --- API ROUTES START (Absolute Priority) ---
-  const apiRouter = express.Router();
-
-  // Diagnostic logger for API router
-  apiRouter.use((req, res, next) => {
-    console.log(`[API Router Debug] ${req.method} ${req.url}`);
+  // --- DIAGNOSTIC LOGGER (Top Priority) ---
+  app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[SERVER DEBUG] ${timestamp} ${req.method} ${req.url}`);
+    console.log(`  Path: ${req.path}`);
+    console.log(`  Headers: ${JSON.stringify(req.headers)}`);
     next();
   });
 
+  // --- API ROUTES (Direct Mount for Maximum Reliability) ---
+  
   // Health check
-  apiRouter.get("/health", (req, res) => {
-    res.json({ status: "ok", time: new Date().toISOString() });
-  });
-
-  // Ping
-  apiRouter.get("/ping", (req, res) => {
-    res.json({ message: "pong" });
+  app.get("/api/health", (req, res) => {
+    console.log(`[API Health Check] Hit from ${req.ip}`);
+    res.json({ 
+      status: "ok", 
+      time: new Date().toISOString(),
+      env: process.env.NODE_ENV || 'development',
+      url: req.url,
+      originalUrl: req.originalUrl
+    });
   });
 
   // Send Email Handler
   const handleSendEmail = async (req: express.Request, res: express.Response) => {
-    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}`);
+    console.log(`[${new Date().toISOString()}] ENTERING handleSendEmail. Method: ${req.method}, URL: ${req.url}, Original: ${req.originalUrl}`);
     
     if (req.method === 'GET') {
       return res.json({ message: "API is alive. Send a POST request to submit.", status: "ok" });
@@ -105,17 +109,42 @@ async function startServer() {
       console.log("Email sent successfully:", info.messageId);
       res.status(200).json({ message: "Success" });
     } catch (error: any) {
-      console.error("SMTP Error:", error);
-      res.status(500).json({ error: error.message });
+      console.error("SMTP Error Details:", {
+        message: error.message,
+        code: error.code,
+        responseCode: error.responseCode,
+        command: error.command
+      });
+
+      let userFriendlyMessage = "Failed to send email. Please try again later.";
+      const smtpCode = error.responseCode || error.code;
+
+      if (smtpCode === 535 || error.message.includes('Authentication')) {
+        userFriendlyMessage = "Authentication failed. Please check your SMTP credentials (App Password).";
+      } else if (smtpCode === 'ETIMEDOUT' || smtpCode === 'ECONNREFUSED') {
+        userFriendlyMessage = "Could not connect to the mail server. Please check your internet connection or SMTP host settings.";
+      } else if (smtpCode === 550) {
+        userFriendlyMessage = "The recipient's mailbox is unavailable or the sender is blocked.";
+      }
+
+      res.status(500).json({ 
+        error: userFriendlyMessage,
+        details: {
+          code: smtpCode,
+          originalMessage: error.message
+        }
+      });
     }
   };
 
-  // Handle /send-email and /send-email/
-  apiRouter.all("/send-email", handleSendEmail);
-  apiRouter.all("/send-email/", handleSendEmail);
+  // Explicitly handle /api/send-email with POST
+  app.post("/api/send-email", handleSendEmail);
+  
+  // Explicitly handle /api/send-email/ with POST
+  app.post("/api/send-email/", handleSendEmail);
 
   // Test SMTP
-  apiRouter.get("/test-smtp", async (req, res) => {
+  app.get("/api/test-smtp", async (req, res) => {
     const smtpUser = (process.env.SMTP_USER || process.env.SMTP_USERNAME || '').trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').trim();
     const smtpHost = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
@@ -140,17 +169,15 @@ async function startServer() {
   });
 
   // API Catch-all (Ensures /api/* always returns JSON, never HTML)
-  apiRouter.all("*", (req, res) => {
-    console.warn(`[API Router 404] ${req.method} ${req.originalUrl || req.url}`);
+  app.all("/api/*", (req, res) => {
+    console.warn(`[API 404 Catch-all] ${req.method} ${req.url} (Original: ${req.originalUrl})`);
     res.status(404).json({ 
       error: "API route not found",
       method: req.method,
-      url: req.originalUrl || req.url
+      url: req.url,
+      originalUrl: req.originalUrl
     });
   });
-
-  // Mount the router
-  app.use("/api", apiRouter);
 
   // --- API ROUTES END ---
 

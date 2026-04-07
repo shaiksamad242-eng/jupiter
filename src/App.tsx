@@ -45,6 +45,7 @@ export default function App() {
       console.log("Response URL:", response.url);
       console.log("Response redirected:", response.redirected);
       console.log("Response type:", response.type);
+      console.log("Response Headers:", Object.fromEntries(response.headers.entries()));
       
       const responseText = await response.text();
       console.log("Response text (first 100 chars):", responseText.substring(0, 100));
@@ -69,6 +70,17 @@ export default function App() {
       setFormError(`A network error occurred: ${error instanceof Error ? error.message : String(error)}. Please check your connection.`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const checkApiStatus = async () => {
+    try {
+      const apiUrl = window.location.origin + "/api/health";
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      alert(`API Status: ${JSON.stringify(data, null, 2)}`);
+    } catch (err: any) {
+      alert(`API Connection Failed: ${err.message}`);
     }
   };
 
@@ -525,6 +537,13 @@ export default function App() {
                       )}
                       <button type="submit" className="btn-f" style={{ width: '100%', marginTop: '1rem', opacity: isSubmitting ? 0.7 : 1 }} disabled={isSubmitting}>
                         {isSubmitting ? 'Sending...' : 'Submit Application'}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={checkApiStatus}
+                        style={{ width: '100%', marginTop: '0.5rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer' }}
+                      >
+                        Check API Connection Status
                       </button>
                     </form>
                   </>
