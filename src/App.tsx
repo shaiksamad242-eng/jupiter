@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Jupiter BPO Services - Logo Updated
 import { useEffect, useState, FormEvent } from 'react';
 import { logoBase64 } from './assets/logoBase64';
 // import { Logo } from './components/Logo';
