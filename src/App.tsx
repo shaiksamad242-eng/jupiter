@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useState, FormEvent } from 'react';
-import logo from './assets/logo.jpg';
+import { logoBase64 } from './assets/logoBase64';
 // import { Logo } from './components/Logo';
 
 export default function App() {
@@ -153,7 +153,7 @@ export default function App() {
       {/* NAV */}
       <nav>
         <div className="nav-logo" onClick={() => go('home')}>
-          <img src={logo} alt="Jupiter Logo" style={{ width: '42px', height: '42px', objectFit: 'contain', borderRadius: '8px' }} />
+          <img src={logoBase64} alt="Jupiter Logo" style={{ width: '42px', height: '42px', objectFit: 'contain', borderRadius: '8px' }} />
           <span className="nav-logo-text">Jupiter Infotech</span>
         </div>
         <ul className="nav-links">
@@ -566,7 +566,7 @@ function Footer({ go }: { go: (id: string) => void }) {
   return (
     <footer>
       <div className="fl">
-        <img src={logo} alt="Jupiter Logo" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '8px' }} />
+        <img src={logoBase64} alt="Jupiter Logo" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '8px' }} />
         <span className="fl-t">Jupiter Infotech</span>
       </div>
       <div className="flinks">
