@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useState, FormEvent } from 'react';
+// import { Logo } from './components/Logo';
 
 export default function App() {
   const [activePage, setActivePage] = useState('home');
@@ -151,19 +152,7 @@ export default function App() {
       {/* NAV */}
       <nav>
         <div className="nav-logo" onClick={() => go('home')}>
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="48" fill="url(#ng1)" />
-            <path d="M22 50 Q50 18 78 50 Q50 82 22 50Z" fill="white" opacity="0.92" />
-            <path d="M28 40 Q50 26 72 40" stroke="white" strokeWidth="3.5" fill="none" opacity="0.55" />
-            <path d="M28 60 Q50 74 72 60" stroke="white" strokeWidth="3.5" fill="none" opacity="0.55" />
-            <defs>
-              <linearGradient id="ng1" x1="0" y1="0" x2="100" y2="100">
-                <stop offset="0%" stopColor="#ff2d78" />
-                <stop offset="50%" stopColor="#ff6b6b" />
-                <stop offset="100%" stopColor="#ffbe0b" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <img src="/logo.jpg" alt="Jupiter Logo" style={{ width: '42px', height: '42px', objectFit: 'contain', borderRadius: '8px' }} />
           <span className="nav-logo-text">Jupiter Infotech</span>
         </div>
         <ul className="nav-links">
@@ -576,16 +565,7 @@ function Footer({ go }: { go: (id: string) => void }) {
   return (
     <footer>
       <div className="fl">
-        <svg viewBox="0 0 100 100" fill="none">
-          <circle cx="50" cy="50" r="48" fill="url(#fg1)" />
-          <path d="M22 50 Q50 18 78 50 Q50 82 22 50Z" fill="white" opacity="0.92" />
-          <defs>
-            <linearGradient id="fg1" x1="0" y1="0" x2="100" y2="100">
-              <stop offset="0%" stopColor="#ff2d78" />
-              <stop offset="100%" stopColor="#ffbe0b" />
-            </linearGradient>
-          </defs>
-        </svg>
+        <img src="/logo.jpg" alt="Jupiter Logo" style={{ width: '40px', height: '40px', objectFit: 'contain', borderRadius: '8px' }} />
         <span className="fl-t">Jupiter Infotech</span>
       </div>
       <div className="flinks">
